@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0c">
+<title>Solarpunk Solutions · SRNE Field Brief · FB-02</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..600&family=Source+Sans+3:wght@300..700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@300..500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0a0a0c;
+    --bg-2:#13131a;
+    --panel:#16161d;
+    --panel-2:#1c1c25;
+    --bone:#ece8dd;
+    --bone-2:#bdb8a8;
+    --muted:#8f8a7e;
+    --faint:#5a574d;
+    --line:rgba(236,232,221,.08);
+    --line-2:rgba(236,232,221,.16);
+    --alarm:#ff3838;
+    --alarm-2:#c84a3e;
+    --alarm-glow:rgba(255,56,56,.35);
+    --caution:#d6a248;
+    --safe:#7aa08e;
+    --safe-2:#9dbdb0;
+    --brass:#b89968;
+    --brass-2:#d4b989;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --sans:'Source Sans 3','Noto Sans SC',system-ui,sans-serif;
+    --display:'Source Serif 4','Noto Serif SC',Georgia,serif;
+    --cn:'Noto Serif SC',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--bone);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;min-height:100vh;overscroll-behavior-y:none;font-weight:300}
+
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1400px 900px at 15% -10%,rgba(122,160,142,.06),transparent 60%),
+      radial-gradient(1100px 700px at 100% 110%,rgba(184,153,104,.05),transparent 60%),
+      repeating-linear-gradient(0deg,rgba(236,232,221,.012) 0,rgba(236,232,221,.012) 1px,transparent 1px,transparent 3px)}
+  body::after{content:"";position:fixed;left:0;right:0;top:0;height:1px;z-index:50;pointer-events:none;
+    background:linear-gradient(90deg,transparent 0,var(--safe) 25%,var(--brass) 75%,transparent 100%);opacity:.45}
+
+  .wrap{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:0 28px}
+
+  /* ============== HEADER ============== */
+  header.top{display:flex;align-items:center;justify-content:space-between;padding:24px 28px;margin-top:24px;border:1px solid var(--line);background:rgba(22,22,29,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  .mark{display:flex;align-items:center;gap:14px}
+  .mark-stamp{width:36px;height:36px;flex:none;border:1.5px solid var(--brass);display:flex;align-items:center;justify-content:center;transform:rotate(-3deg);background:rgba(184,153,104,.05)}
+  .mark-stamp span{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--brass-2);letter-spacing:.06em;line-height:1}
+  .mark-text{display:flex;flex-direction:column;gap:2px}
+  .mark-text .ent{font-family:var(--display);font-weight:500;font-size:14px;letter-spacing:.18em;color:var(--bone)}
+  .mark-text .sub{font-family:var(--mono);font-size:10px;letter-spacing:.28em;color:var(--faint);text-transform:uppercase}
+  .doc-id{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-align:right;line-height:1.6}
+  .doc-id b{color:var(--bone);font-weight:500}
+  .doc-id .accent{color:var(--brass-2);font-weight:600;letter-spacing:.22em}
+  .xref{display:inline-block;font-family:var(--mono);font-size:10px;color:var(--faint);letter-spacing:.2em;border-left:2px solid var(--brass);padding-left:8px;margin-top:4px}
+  .xref a{color:var(--brass-2);text-decoration:none}
+
+  /* ============== HERO ============== */
+  .hero{padding:72px 64px 56px;margin:36px 0 0;background:rgba(22,22,29,.94);border:1px solid var(--line);position:relative;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .hero::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--safe) 0,var(--brass) 50%,var(--alarm) 100%);opacity:.6}
+  .eyebrow{display:inline-flex;align-items:center;gap:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.36em;text-transform:uppercase;color:var(--brass-2);margin-bottom:32px;padding:9px 18px;border:1px solid rgba(184,153,104,.3);background:rgba(184,153,104,.05);font-weight:500}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--brass-2);box-shadow:0 0 10px var(--brass),0 0 24px rgba(184,153,104,.5);animation:emit 2.4s ease-in-out infinite}
+  @keyframes emit{0%,100%{opacity:1}50%{opacity:.45}}
+  .eyebrow .sep{color:var(--faint);font-weight:300}
+  .eyebrow .cn{font-family:var(--cn);font-size:12.5px;letter-spacing:.06em;color:var(--brass-2);text-transform:none;font-weight:300}
+
+  h1{font-family:var(--display);font-weight:400;letter-spacing:-.022em;font-size:clamp(40px,6.6vw,82px);line-height:1.02;color:var(--bone);max-width:18ch}
+  h1 .em{font-style:italic;font-weight:400;color:var(--brass-2);letter-spacing:-.018em;display:inline-block;text-shadow:0 0 36px rgba(184,153,104,.25)}
+  h1 .cn-sub{display:block;margin-top:24px;font-family:var(--cn);font-weight:300;font-size:clamp(15px,1.4vw,20px);letter-spacing:.32em;color:var(--brass);opacity:.65}
+  .lede{margin:36px 0 0;color:var(--bone-2);font-size:17px;max-width:62ch;font-weight:300;line-height:1.7}
+  .lede b{color:var(--brass-2);font-weight:500}
+  .lede em{font-style:normal;color:var(--safe-2);font-weight:500}
+  .lede .warn{color:var(--alarm-2);font-weight:500;font-style:normal}
+
+  .tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:48px}
+  .tldr-cell{padding:24px;border:1px solid var(--line);background:rgba(10,10,12,.6)}
+  .tldr-cell.good{border-left:3px solid var(--safe)}
+  .tldr-cell.flag{border-left:3px solid var(--alarm-2)}
+  .tldr-cell .n{font-family:var(--mono);font-size:11px;letter-spacing:.22em;font-weight:600;margin-bottom:14px}
+  .tldr-cell.good .n{color:var(--safe)}
+  .tldr-cell.flag .n{color:var(--alarm-2)}
+  .tldr-cell .n.neutral{color:var(--brass-2)}
+  .tldr-cell .h{font-family:var(--display);font-weight:400;font-size:19px;letter-spacing:-.01em;color:var(--bone);margin-bottom:10px;line-height:1.25}
+  .tldr-cell .d{font-size:13px;color:var(--muted);line-height:1.6}
+  .tldr-cell .d b{color:var(--bone-2);font-weight:500}
+
+  section{margin-top:56px}
+  .sect-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+  .sect-head h2{font-family:var(--display);font-weight:400;font-size:clamp(28px,3.6vw,42px);letter-spacing:-.02em;color:var(--bone)}
+  .sect-head .num{font-family:var(--mono);font-size:11px;letter-spacing:.32em;color:var(--brass);font-weight:500;text-transform:uppercase}
+  .sect-head .num b{color:var(--bone)}
+  .sect-intro{font-size:15.5px;color:var(--bone-2);max-width:64ch;line-height:1.7;margin-bottom:32px;font-weight:300}
+  .sect-intro b{color:var(--bone);font-weight:500}
+
+  /* ============== SIGNATURE VISUAL — Sphere of Influence ============== */
+  .map-card{background:rgba(22,22,29,.94);border:1px solid var(--line);padding:36px;position:relative;overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .map-card::before{content:"OEM TOPOLOGY · 制造商";position:absolute;top:18px;right:24px;font-family:var(--mono);font-size:9.5px;letter-spacing:.32em;color:var(--faint);text-transform:uppercase}
+  svg.sphere{width:100%;height:auto;max-height:720px;display:block}
+  .map-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:24px;padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+  .map-legend span{display:inline-flex;align-items:center;gap:10px}
+  .map-legend i{display:inline-block;width:12px;height:12px;border-radius:2px}
+
+  /* ============== UL1741-SB GAP CARD ============== */
+  .gap-card{background:rgba(22,22,29,.94);border:1px solid var(--line);padding:36px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative}
+  .gap-card .stamp{position:absolute;top:24px;right:28px;font-family:var(--mono);font-size:10px;letter-spacing:.32em;color:var(--alarm-2);text-transform:uppercase;border:1px solid var(--alarm-2);padding:6px 10px;background:rgba(200,74,62,.05)}
+  .gap-head{font-family:var(--display);font-weight:400;font-size:clamp(24px,3vw,34px);letter-spacing:-.018em;color:var(--bone);margin-bottom:18px;max-width:24ch;line-height:1.15}
+  .gap-head .em{color:var(--alarm-2);font-style:italic}
+  .gap-body{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}
+  .gap-side{padding:20px 24px;border:1px solid var(--line);background:rgba(10,10,12,.4)}
+  .gap-side .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--brass);text-transform:uppercase;margin-bottom:10px;font-weight:600}
+  .gap-side h4{font-family:var(--display);font-size:17px;font-weight:400;color:var(--bone);margin-bottom:10px;line-height:1.3}
+  .gap-side p{font-size:13.5px;color:var(--muted);line-height:1.65}
+  .gap-side p b{color:var(--bone-2);font-weight:500}
+  .gap-side.ok{border-left:3px solid var(--safe)}
+  .gap-side.gap{border-left:3px solid var(--alarm-2)}
+
+  /* ============== GRADE TABLE ============== */
+  .grid-table{background:rgba(22,22,29,.94);border:1px solid var(--line);overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .gt-row{display:grid;grid-template-columns:2fr 1.4fr 1fr 0.7fr 2fr;gap:0;border-bottom:1px solid var(--line);transition:background .15s}
+  .gt-row:last-child{border-bottom:0}
+  .gt-row:hover{background:rgba(255,255,255,.015)}
+  .gt-row.head{background:rgba(10,10,12,.6);border-bottom:1px solid var(--line-2)}
+  .gt-row > div{padding:16px 18px;display:flex;align-items:center;border-right:1px solid var(--line)}
+  .gt-row > div:last-child{border-right:0}
+  .gt-row.head > div{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);font-weight:500;padding-top:14px;padding-bottom:14px}
+  .gt-sku{font-family:var(--mono);font-size:12px;color:var(--bone);font-weight:500;letter-spacing:.01em}
+  .gt-kw{font-family:var(--display);font-size:15px;color:var(--bone-2);font-weight:400}
+  .gt-cert{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--bone-2)}
+  .gt-cert.partial{color:var(--caution)}
+  .gt-cert.full{color:var(--safe-2)}
+  .gt-cert.none{color:var(--alarm-2);font-style:italic}
+  .gt-grade{font-family:var(--display);font-size:28px;font-weight:400;letter-spacing:-.02em;justify-content:center}
+  .gt-grade.A{color:var(--safe)}
+  .gt-grade.B{color:var(--safe);opacity:.85}
+  .gt-grade.Bm{color:var(--safe);opacity:.7}
+  .gt-grade.C{color:var(--caution)}
+  .gt-grade.D{color:var(--alarm-2)}
+  .gt-grade.I{color:var(--muted);font-size:22px;letter-spacing:.16em}
+  .gt-reason{font-size:13px;color:var(--muted);line-height:1.5}
+  .gt-reason b{color:var(--bone-2);font-weight:500}
+
+  /* ============== CROSS-REFERENCE TABLE ============== */
+  .xref-table{background:rgba(22,22,29,.94);border:1px solid var(--line);overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .xref-row{display:grid;grid-template-columns:1.6fr 1.3fr 1.3fr 1.3fr 1.3fr;gap:0;border-bottom:1px solid var(--line)}
+  .xref-row:last-child{border-bottom:0}
+  .xref-row.head{background:rgba(10,10,12,.6);border-bottom:1px solid var(--line-2)}
+  .xref-row > div{padding:14px 16px;display:flex;align-items:center;border-right:1px solid var(--line);font-size:13px}
+  .xref-row > div:last-child{border-right:0}
+  .xref-row.head > div{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500;padding-top:14px;padding-bottom:14px}
+  .xref-row .srne{font-family:var(--mono);color:var(--bone);font-weight:500;font-size:12px}
+  .xref-row .other{font-family:var(--display);color:var(--bone-2);font-size:14px}
+  .xref-row .other.bad{color:var(--alarm-2)}
+  .xref-row .other.ok{color:var(--safe-2)}
+  .xref-row .other.skip{color:var(--faint);font-style:italic}
+
+  /* ============== WHITE-LABEL BRAND GRID ============== */
+  .brands{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+  .brand{padding:24px;background:rgba(22,22,29,.94);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);position:relative}
+  .brand.confirmed{border-left:3px solid var(--safe)}
+  .brand.refuted{border-left:3px solid var(--alarm-2);opacity:.75}
+  .brand .lab{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;margin-bottom:10px;font-weight:600}
+  .brand.confirmed .lab{color:var(--safe)}
+  .brand.refuted .lab{color:var(--alarm-2)}
+  .brand .name{font-family:var(--display);font-size:22px;font-weight:400;color:var(--bone);line-height:1.15;margin-bottom:8px;letter-spacing:-.01em}
+  .brand .skus{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--bone-2);line-height:1.6;margin-bottom:10px;word-break:break-word}
+  .brand.refuted .name{text-decoration:line-through;text-decoration-color:var(--alarm-2);text-decoration-thickness:1.5px;color:var(--bone-2)}
+  .brand .why{font-size:12.5px;color:var(--muted);line-height:1.55}
+
+  /* ============== RECEIPTS ============== */
+  .receipts{background:rgba(22,22,29,.94);border:1px solid var(--line);padding:36px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .receipts ol{list-style:none;counter-reset:rcpt}
+  .receipts li{counter-increment:rcpt;padding:18px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:48px 1fr;gap:18px;align-items:start}
+  .receipts li:last-child{border-bottom:0}
+  .receipts li::before{content:counter(rcpt,decimal-leading-zero);font-family:var(--mono);color:var(--brass);font-size:11px;letter-spacing:.18em;font-weight:600;padding-top:3px}
+  .receipts .quote{font-family:var(--display);font-size:14.5px;color:var(--bone);font-style:italic;line-height:1.5;margin-bottom:8px}
+  .receipts .meta{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
+  .receipts .meta a{color:var(--brass-2);text-decoration:none;border-bottom:1px solid var(--line-2);padding-bottom:1px;word-break:break-all}
+  .receipts .meta a:hover{color:var(--bone);border-color:var(--brass-2)}
+  .receipts .meta .when{color:var(--bone-2)}
+
+  footer{margin:64px 0 40px;padding:28px;border:1px solid var(--line);background:rgba(22,22,29,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  footer b{color:var(--bone-2);font-weight:500}
+  footer .meta{text-align:right}
+  footer a{color:var(--brass-2);text-decoration:none}
+
+  @media(max-width:980px){
+    .hero{padding:48px 28px 40px}
+    .tldr{grid-template-columns:1fr}
+    .gap-body{grid-template-columns:1fr}
+    .brands{grid-template-columns:1fr 1fr}
+    .gt-row{grid-template-columns:1.5fr 1fr 0.9fr 0.5fr 2fr}
+    .xref-row{grid-template-columns:1.4fr 1fr 1fr 1fr 1fr}
+  }
+  @media(max-width:680px){
+    body::before{display:none}
+    .wrap{padding:0 18px}
+    header.top{padding:16px 18px;margin-top:16px;flex-direction:column;gap:14px;align-items:flex-start}
+    .doc-id{text-align:left}
+    .hero{padding:36px 22px 32px;margin-top:18px}
+    .hero::before{height:1px}
+    .lede{font-size:15px}
+    h1{font-size:clamp(32px,8vw,46px) !important;line-height:1.05}
+    .tldr-cell{padding:20px}
+    .map-card,.gap-card,.receipts{padding:24px 20px}
+    .gap-card .stamp{position:static;display:inline-block;margin-bottom:14px}
+    .brands{grid-template-columns:1fr}
+    .gt-row,.xref-row{grid-template-columns:1fr;display:flex;flex-direction:column;padding:14px 0}
+    .gt-row > div,.xref-row > div{border-right:0;border-bottom:1px solid var(--line);padding:8px 18px;width:100%}
+    .gt-row > div:last-child,.xref-row > div:last-child{border-bottom:0}
+    .gt-row.head,.xref-row.head{display:none}
+    .gt-sku::before{content:"SKU · ";color:var(--faint);font-size:9px;letter-spacing:.2em}
+    .gt-grade{justify-content:flex-start;font-size:36px}
+    footer{flex-direction:column;padding:20px}
+    footer .meta{text-align:left}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============== HEADER ============== -->
+  <header class="top">
+    <div class="mark">
+      <div class="mark-stamp"><span>FB<br>02</span></div>
+      <div class="mark-text">
+        <div class="ent">SOLARPUNK · SOLUTIONS</div>
+        <div class="sub">Inverter field brief · Asheville NC</div>
+      </div>
+    </div>
+    <div class="doc-id">
+      <div>Doc · <b>FB-SRNE-02</b></div>
+      <div>Prepared · <b>2026·06·09</b></div>
+      <div class="accent">Cross-ref · for Vance &amp; Lisa</div>
+      <div class="xref">XREF · <a href="https://solarpunk-inverter-brief.vercel.app" target="_blank" rel="noopener">FB-GSL-01</a></div>
+    </div>
+  </header>
+
+  <!-- ============== HERO ============== -->
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span>Field brief <span class="sep">·</span> <span class="cn">实地调查</span> <span class="sep">·</span> 02 of N</div>
+    <h1>SRNE actually makes them.<br><span class="em">Sungold. Eco-Worthy. SEI-12K.</span><span class="cn-sub">硕日新能源 · 真正的制造商</span></h1>
+    <p class="lede">The inverse of <b>FB-01</b>. Where GSL slaps its sticker on someone else's silicon, <em>SRNE is the silicon</em> — Shenzhen factory since 2009, openly OEM, and roughly <b>a dozen US brands</b> ship SRNE hardware under different faceplates. <em>Clean channel</em> on the Sol-Ark / Deye trade war. <b>4× the install base of GSL</b> on the English forums. One serious gap: <span class="warn">UL1741-SB unconfirmed</span> on the current US split-phase line.</p>
+
+    <div class="tldr">
+      <div class="tldr-cell good">
+        <div class="n">01 · OEM truth</div>
+        <div class="h">SRNE is the manufacturer.</div>
+        <div class="d">Factory in Chang'an Dongguan since 2009. <b>Sungold Power, Eco-Worthy, Signature Solar (SEI-12K-UPRO), Hysolis, PowMr, Y&amp;H, Arenji</b> all confirmed forum-sourced as private-label SRNE. Mango Power and EcoFlow PowerOcean are <b>refuted</b>.</div>
+      </div>
+      <div class="tldr-cell good">
+        <div class="n">02 · Clean channel</div>
+        <div class="h">Not in the Sol-Ark/Deye crossfire.</div>
+        <div class="d">No documented remote-disable, brick, or forced-firmware event on SRNE hardware in any source. Sol-Ark exclusivity is Deye-specific. <b>SRNE has its own brand identity and US distribution layer (Borick / GrandTech / Signature Solar).</b></div>
+      </div>
+      <div class="tldr-cell flag">
+        <div class="n">03 · The gap</div>
+        <div class="h">UL1741-SB not confirmed.</div>
+        <div class="d">Current US split-phase line shows <b>UL1741 + cETL</b> on the older HEBP / SEI-12K-UPRO. UL1741-SB (the IEEE 1547-2018-aligned grid-ride-through revision) is <b>not documented on any current SRNE US model</b> — matters for paid AHJ-inspected grid-tied installs in NC.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SECTION 1 · OEM TOPOLOGY ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>SRNE at the center · brands radiating out.</h2>
+      <div class="num"><b>01</b> · Sphere of influence</div>
+    </div>
+    <p class="sect-intro">Inverted from FB-01. The center node is the actual factory. Inner ring is SRNE's own brand line. Middle ring is confirmed private-label customers wearing SRNE hardware under their own stickers. Outer ring is the <b>refuted</b> rumor brands — confirmed NOT to use SRNE silicon, regardless of online speculation.</p>
+
+    <div class="map-card">
+      <svg class="sphere" viewBox="0 0 1180 700" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+        <defs>
+          <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#b89968" stop-opacity=".45"/>
+            <stop offset="40%" stop-color="#b89968" stop-opacity=".18"/>
+            <stop offset="100%" stop-color="#b89968" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="safeRing" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7aa08e" stop-opacity="0"/>
+            <stop offset="100%" stop-color="#7aa08e" stop-opacity=".08"/>
+          </radialGradient>
+          <filter id="brassGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6"/>
+          </filter>
+        </defs>
+
+        <!-- ===== ambient outer ring (faint area where refuted brands sit) ===== -->
+        <circle cx="590" cy="350" r="320" fill="none" stroke="#5a574d" stroke-width=".8" stroke-dasharray="3 6" opacity=".55"/>
+        <!-- ===== middle ring (confirmed private-label) ===== -->
+        <circle cx="590" cy="350" r="220" fill="url(#safeRing)" stroke="#7aa08e" stroke-width="1" stroke-dasharray="6 5" opacity=".7"/>
+        <!-- ===== inner ring (SRNE-branded models) ===== -->
+        <circle cx="590" cy="350" r="115" fill="none" stroke="#b89968" stroke-width="1.2" opacity=".55"/>
+
+        <!-- core node SRNE -->
+        <circle cx="590" cy="350" r="80" fill="url(#coreGlow)" filter="url(#brassGlow)"/>
+        <circle cx="590" cy="350" r="62" fill="#0a0a0c" stroke="#b89968" stroke-width="2"/>
+        <text x="590" y="338" text-anchor="middle" font-family="Source Serif 4" font-size="26" font-weight="400" fill="#ece8dd">SRNE</text>
+        <text x="590" y="358" text-anchor="middle" font-family="Noto Serif SC" font-size="11" fill="#b89968" letter-spacing="3">硕日</text>
+        <text x="590" y="376" text-anchor="middle" font-family="JetBrains Mono" font-size="8.5" letter-spacing="2.5" fill="#8f8a7e">2009 · DONGGUAN</text>
+
+        <!-- INNER RING · SRNE-branded models (around r=115) -->
+        <g font-family="JetBrains Mono" font-size="10" letter-spacing="1.5" fill="#bdb8a8">
+          <text x="590" y="240" text-anchor="middle">HF series</text>
+          <text x="705" y="350" text-anchor="middle">HESP series</text>
+          <text x="590" y="465" text-anchor="middle">HEBP-Pro</text>
+          <text x="475" y="350" text-anchor="middle">ASF / ASP</text>
+        </g>
+        <!-- inner-ring brackets -->
+        <g stroke="#b89968" stroke-width=".8" opacity=".6" fill="none">
+          <line x1="590" y1="245" x2="590" y2="262"/>
+          <line x1="700" y1="350" x2="685" y2="350"/>
+          <line x1="590" y1="460" x2="590" y2="445"/>
+          <line x1="480" y1="350" x2="495" y2="350"/>
+        </g>
+
+        <!-- MIDDLE RING · confirmed private-label customers (around r=220) -->
+        <g font-family="Source Serif 4" font-size="17" font-weight="400" fill="#9dbdb0">
+          <!-- top -->
+          <text x="590" y="138" text-anchor="middle">Sungold Power</text>
+          <text x="590" y="156" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">Freedom 12K-B · SPH10048P · SGS-12K18MAX</text>
+          <!-- right -->
+          <text x="833" y="278" text-anchor="middle">Signature Solar</text>
+          <text x="833" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">SEI-12K-UPRO = HEBP48120U240</text>
+          <!-- bottom-right -->
+          <text x="833" y="422" text-anchor="middle">Hysolis</text>
+          <text x="833" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">SRNE hybrid · retail front</text>
+          <!-- bottom -->
+          <text x="590" y="568" text-anchor="middle">Eco-Worthy</text>
+          <text x="590" y="586" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">ECO5000W · 10kW split-phase AIO</text>
+          <!-- bottom-left -->
+          <text x="347" y="422" text-anchor="middle">PowMr</text>
+          <text x="347" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">multiple AIO models</text>
+          <!-- left -->
+          <text x="347" y="278" text-anchor="middle">Y&amp;H · Arenji</text>
+          <text x="347" y="296" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="1.5" fill="#7aa08e">budget channel rebrands</text>
+        </g>
+        <!-- middle ring connectors (subtle radial lines from inner to middle) -->
+        <g stroke="#7aa08e" stroke-width=".8" stroke-dasharray="4 4" opacity=".4">
+          <line x1="590" y1="289" x2="590" y2="170"/>
+          <line x1="700" y1="295" x2="800" y2="265"/>
+          <line x1="700" y1="405" x2="800" y2="430"/>
+          <line x1="590" y1="411" x2="590" y2="540"/>
+          <line x1="480" y1="405" x2="380" y2="430"/>
+          <line x1="480" y1="295" x2="380" y2="265"/>
+        </g>
+
+        <!-- OUTER RING · refuted brands (around r=320) -->
+        <g font-family="Source Serif 4" font-size="17" font-weight="400" fill="#5a574d" font-style="italic">
+          <!-- top-left refuted -->
+          <g>
+            <text x="270" y="100" text-anchor="middle" text-decoration="line-through">Mango Power E / M</text>
+            <text x="270" y="118" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#c84a3e" letter-spacing="1.5">REFUTED · Infineon + CATL</text>
+          </g>
+          <!-- top-right refuted -->
+          <g>
+            <text x="910" y="100" text-anchor="middle" text-decoration="line-through">EcoFlow PowerOcean</text>
+            <text x="910" y="118" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#c84a3e" letter-spacing="1.5">REFUTED · Jonhon Optronic</text>
+          </g>
+        </g>
+
+        <!-- legend stamp -->
+        <g font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="#8f8a7e">
+          <text x="65" y="670">[ CORE · MANUFACTURER ]</text>
+          <text x="450" y="670">[ INNER · SRNE-BRANDED MODELS ]</text>
+          <text x="820" y="670">[ MIDDLE · WHITE-LABEL · OUTER · REFUTED ]</text>
+        </g>
+      </svg>
+
+      <div class="map-legend">
+        <span><i style="background:#b89968"></i>SRNE · manufacturer core</span>
+        <span><i style="background:#bdb8a8"></i>SRNE-branded model line</span>
+        <span><i style="background:#7aa08e"></i>Confirmed private-label · same factory</span>
+        <span><i style="background:#5a574d;border:1px dashed #c84a3e"></i>Refuted · not SRNE</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SECTION 2 · THE UL1741-SB GAP ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>The UL1741-SB gap.</h2>
+      <div class="num"><b>02</b> · Cert posture</div>
+    </div>
+    <p class="sect-intro">This is the single most actionable finding for Lisa. SRNE has a real cert posture for the older revision of UL1741, plus a cETL mark — fine for off-grid, fine for back-up, fine for places that don't connect to the utility. For a <b>paid, AHJ-inspected grid-tied install in North Carolina</b>, the AHJ is increasingly going to ask for UL1741-SB (the IEEE 1547-2018-aligned revision) and the SRNE current US line does not publicly document it.</p>
+
+    <div class="gap-card">
+      <div class="stamp">Cert · audit</div>
+      <div class="gap-head">SRNE has <span class="em">UL1741 + cETL</span>. It does not have <span class="em">UL1741-SB</span>.</div>
+      <div class="gap-body">
+        <div class="gap-side ok">
+          <div class="lbl">What's there</div>
+          <h4>UL1741 + CSA-C22.2 No. 107.1 + cETL</h4>
+          <p>Documented on SRNE's official blog and on the HEBP-Pro / SEI-12K-UPRO product datasheets. Covers <b>off-grid</b>, <b>back-up</b>, <b>self-consumption</b>, and most permitted residential installs where grid-ride-through compliance is not the binding constraint. This is real cert and Borick / Signature Solar have shipped these into US installs that pass inspection at the AHJ level.</p>
+        </div>
+        <div class="gap-side gap">
+          <div class="lbl">What's missing</div>
+          <h4>UL1741-SB · IEEE 1547-2018</h4>
+          <p>The revision that codifies <b>grid-ride-through</b> behavior, anti-islanding under modern utility profiles, and reactive-power priority. Increasingly required on paid grid-tied residential and all commercial. <b>Not documented on any current SRNE US split-phase model</b> as of this brief. Sol-Ark, EG4 (18kPV), and Solis S6-EH all carry it. For Lisa's commercial work this is the line.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SECTION 3 · GRADE TABLE ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>The grid · per-SKU verdict.</h2>
+      <div class="num"><b>03</b> · Field grades</div>
+    </div>
+    <p class="sect-intro">Sample size is dramatically larger than FB-01 — <b>~25 distinct DIY Solar Forum threads</b> cited or surfaced, ~4× the GSL footprint. That alone is a real signal: SRNE has installed base, installers talk about them, the community has fingerprints on the firmware. Grades reflect cert posture + documented field issues + forum-thread depth.</p>
+
+    <div class="grid-table">
+      <div class="gt-row head">
+        <div>SKU</div><div>Power · topology</div><div>Cert</div><div style="justify-content:center">Grade</div><div>Reason</div>
+      </div>
+      <div class="gt-row"><div class="gt-sku">HF2430U60-100</div><div class="gt-kw">3 kW · 120V 1ϕ</div><div class="gt-cert full">UL1741 + cETL</div><div class="gt-grade B">B</div><div class="gt-reason">Older platform · well-trodden · <b>"ghost fan-fault"</b> (err 21) tolerable</div></div>
+      <div class="gt-row"><div class="gt-sku">HESP4860</div><div class="gt-kw">6 kW · split-phase</div><div class="gt-cert partial">UL1741 (no SB)</div><div class="gt-grade C">C</div><div class="gt-reason"><b>Fault code 58</b> BMS-comms hassle · firmware MPPT-sweep bug v6.35+</div></div>
+      <div class="gt-row"><div class="gt-sku">HESP48100/120U200-H</div><div class="gt-kw">10 / 12 kW · split-phase</div><div class="gt-cert partial">UL1741 (no SB)</div><div class="gt-grade C">C</div><div class="gt-reason">Older firmware tree · <b>"10kW shuts down"</b> thread + 400V cap failure documented</div></div>
+      <div class="gt-row"><div class="gt-sku">ASF48100U200-H</div><div class="gt-kw">10 kW · indoor IP20</div><div class="gt-cert none">not stated</div><div class="gt-grade C">C</div><div class="gt-reason">Indoor IP20 only · real install constraint · sample data thin</div></div>
+      <div class="gt-row"><div class="gt-sku">ASP48100U200-H</div><div class="gt-kw">8–10 kW · 110/208/240</div><div class="gt-cert none">not stated</div><div class="gt-grade Bm">B−</div><div class="gt-reason">Support praised in single deep thread · long-term durability <b>incomplete</b></div></div>
+      <div class="gt-row" style="background:rgba(122,160,142,.04)"><div class="gt-sku">HEBP48120U240-Pro · SEI-12K-UPRO</div><div class="gt-kw">12 kW · split-phase</div><div class="gt-cert full">ETL + UL1741</div><div class="gt-grade B">B+</div><div class="gt-reason"><b>SRNE flagship.</b> 200A passthrough · outdoor-rated · 50+ pages of active threads · GrandTech support responsive. <b>Would be A if UL1741-SB were confirmed.</b></div></div>
+      <div class="gt-row"><div class="gt-sku">HEBP48080/100U240-Pro</div><div class="gt-kw">8 / 10 kW · split-phase</div><div class="gt-cert full">ETL + UL1741</div><div class="gt-grade I">i</div><div class="gt-reason">Same Pro platform as 12K-UPRO · thinner field data on these capacities</div></div>
+    </div>
+  </section>
+
+  <!-- ============== SECTION 4 · CROSS-REFERENCE ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>Across the brands · capacity-tier cross-ref.</h2>
+      <div class="num"><b>04</b> · Direct comparison</div>
+    </div>
+    <p class="sect-intro">How the SRNE lineup stacks against GSL (FB-01), Solis, Sol-Ark, and EG4 at the capacity tiers that matter for Solarpunk's actual install profile.</p>
+
+    <div class="xref-table">
+      <div class="xref-row head">
+        <div>SRNE</div><div>GSL (FB-01)</div><div>Solis</div><div>Sol-Ark</div><div>EG4</div>
+      </div>
+      <div class="xref-row">
+        <div class="srne">HESP4860 · 6 kW</div>
+        <div class="other bad">SPI-6K (Deye)</div>
+        <div class="other ok">S5-EH1P6K-L</div>
+        <div class="other skip">n/a · 8K min</div>
+        <div class="other ok">6000XP</div>
+      </div>
+      <div class="xref-row">
+        <div class="srne">HESP48100U200-H · 10 kW</div>
+        <div class="other bad">TPE-10K (Deye)</div>
+        <div class="other ok">S6-EH3P10K-LV</div>
+        <div class="other ok">SA-12K (close)</div>
+        <div class="other skip">18kPV (overkill)</div>
+      </div>
+      <div class="xref-row" style="background:rgba(122,160,142,.04)">
+        <div class="srne">HEBP48120U240-Pro · 12 kW</div>
+        <div class="other bad">TPE-12K (Deye)</div>
+        <div class="other ok">S6-EH3P30K03-LV (3ϕ)</div>
+        <div class="other ok"><b style="color:var(--bone)">SA-12K</b></div>
+        <div class="other ok"><b style="color:var(--bone)">12000XP / 18kPV</b></div>
+      </div>
+      <div class="xref-row">
+        <div class="srne">ASF/ASP 10 kW indoor</div>
+        <div class="other bad">GES-10K (Deye)</div>
+        <div class="other skip">—</div>
+        <div class="other skip">—</div>
+        <div class="other ok">6500EX</div>
+      </div>
+    </div>
+
+    <p class="sect-intro" style="margin-top:24px;font-size:14px;color:var(--bone-2);max-width:none;line-height:1.6">
+      <b style="color:var(--bone)">Read:</b> SRNE's HEBP-Pro flagship at ~$1,800 street meaningfully threatens the EG4 18kPV value proposition <b>for non-grid-tied installs</b>. For grid-tied with paid AHJ inspection, <b>EG4 18kPV stays the winner</b> on the UL1741-SB cert posture alone.
+    </p>
+  </section>
+
+  <!-- ============== SECTION 5 · WHITE-LABEL ROSTER ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>The roster · who's wearing SRNE.</h2>
+      <div class="num"><b>05</b> · Private-label confirmed &amp; refuted</div>
+    </div>
+    <p class="sect-intro">If Vance sees one of these stickers on a job site or in a quote, this is what's under it. The actionable inversion of FB-01: a "no-name" Eco-Worthy or Sungold inverter is an <b>SRNE</b> under the sticker, with the same firmware quirks and same RMA pipe. So the cheap clone gets the same realities as the parent — not a different product.</p>
+
+    <div class="brands">
+      <div class="brand confirmed">
+        <div class="lab">Confirmed · same factory</div>
+        <div class="name">Sungold Power</div>
+        <div class="skus">Freedom 12K-B<br>SPH10048P<br>SGS-12K18MAX</div>
+        <div class="why">Multiple independent forum confirmations. The "10kW Sungold" thread explicitly traces back to SRNE hardware. Same firmware tree, same fault codes.</div>
+      </div>
+      <div class="brand confirmed">
+        <div class="lab">Confirmed · same factory</div>
+        <div class="name">Eco-Worthy</div>
+        <div class="skus">ECO5000W<br>10,000W split-phase AIO</div>
+        <div class="why">"Eco-Worthy SNRE 5K high idle consumption" thread is the tell — the title literally says SNRE. RS485 BMS comms behavior identical to SRNE-branded HESP.</div>
+      </div>
+      <div class="brand confirmed">
+        <div class="lab">Confirmed · same factory</div>
+        <div class="name">Signature Solar</div>
+        <div class="skus">SEI-12K-UPRO<br>= HEBP48120U240-Pro</div>
+        <div class="why">Sig Solar's flagship 12K is literally the SRNE HEBP-Pro with a different faceplate. GrandTech is named as the support layer. Highest-quality SRNE rebrand in the US channel.</div>
+      </div>
+      <div class="brand confirmed">
+        <div class="lab">Confirmed · same factory</div>
+        <div class="name">Hysolis</div>
+        <div class="skus">SRNE hybrid line · retail</div>
+        <div class="why">Sells SRNE-branded hybrid inverters under its own retail storefront — semi-rebrand, semi-distributor. Closest thing to a known-good SRNE channel in the US for budget tier.</div>
+      </div>
+      <div class="brand confirmed">
+        <div class="lab">Confirmed · same factory</div>
+        <div class="name">PowMr · Y&amp;H · Arenji</div>
+        <div class="skus">multiple budget AIO models</div>
+        <div class="why">Named in the "Who Makes This Stuff" cross-reference thread (DIYsolarforum 72281). Budget-channel rebrands — buy with eyes open.</div>
+      </div>
+      <div class="brand refuted">
+        <div class="lab">Refuted · not SRNE</div>
+        <div class="name">Mango Power E / M</div>
+        <div class="skus">Infineon power stage<br>CATL cells</div>
+        <div class="why">Mango Power publicly markets an exclusive Infineon partnership and CATL cells. No teardown evidence anywhere linking to SRNE silicon. Treat the rumor as <b>unsupported</b>.</div>
+      </div>
+      <div class="brand refuted">
+        <div class="lab">Refuted · not SRNE</div>
+        <div class="name">EcoFlow PowerOcean</div>
+        <div class="skus">Jonhon Optronic OEM</div>
+        <div class="why">PowerOcean user manuals reference Jonhon Optronic Technology as manufacturing partner. No SRNE linkage in any source — datasheet, firmware, or teardown.</div>
+      </div>
+      <div class="brand confirmed">
+        <div class="lab">Plausible · MidNite DIY</div>
+        <div class="name">MidNite Solar DIY series</div>
+        <div class="skus">DIY-line AIO hybrid</div>
+        <div class="why">Forum cross-references suggest MidNite's recent DIY hybrid line shares architecture with SRNE; confirm before you commit. MidNite proper (Classic / Barracuda) is independent.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SECTION 6 · RECEIPTS ============== -->
+  <section>
+    <div class="sect-head">
+      <h2>The receipts.</h2>
+      <div class="num"><b>06</b> · Evidence · 14 sources</div>
+    </div>
+    <p class="sect-intro">Every claim above traces back to one of these. Dates listed where available. Note the depth — multi-page threads with active installer participation, not single-thread anecdotes.</p>
+
+    <div class="receipts">
+      <ol>
+        <li>
+          <div>
+            <div class="quote">SRNE company page — self-identification as inverter manufacturer since 2009, openly solicits OEM / private-label orders.</div>
+            <div class="meta"><span class="when">SRNE official · vendor page</span> · <a href="https://www.srnesolar.com/page/About-SRNE.html" target="_blank" rel="noopener">srnesolar.com/page/About-SRNE.html</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Sun Gold Power Freedom 12K-B inverter — SRNE rebrand." Direct identification of Sungold's flagship as SRNE OEM hardware.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/sun-gold-power-freedom-12k-b-inverter-srne-rebrand.112380/" target="_blank" rel="noopener">sungold-freedom-12k-b-inverter-srne-rebrand.112380</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Is the Sungold 12K AIO an SRNE?" — community confirmation thread.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/is-the-sungold-12k-aio-an-srne.123493/" target="_blank" rel="noopener">is-the-sungold-12k-aio-an-srne.123493</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Big update on my Sungold 10kW, aka SRNE clone." Owner walking through identical firmware behavior to the SRNE-branded HESP.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/big-update-on-my-sungold-10kw-aka-srne-clone-well-big-to-me.109376/" target="_blank" rel="noopener">sungold-10kw-aka-srne-clone.109376</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Echo Worthy ECO5000W SNRE 5K high idle consumption — 200W bypass relay fault — 48V bank — no comm." Eco-Worthy identified directly as SRNE-OEM in the thread title.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/echo-worthy-eco5000w-snre-5k-high-idle-consumption-200w-bypass-relay-fault-48v-bank-no-comm-updated.113809/" target="_blank" rel="noopener">eco5000w-snre-5k-bypass-relay-fault.113809</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Eco-Worthy 10,000W split-phase 2555-W 10kWh rack batteries." Identical SRNE platform feature set under Eco-Worthy faceplate.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/ecoworthy-10-000w-split-phase-2555-w-10kwh-rack-batteries.102075/" target="_blank" rel="noopener">ecoworthy-10000w-split-phase.102075</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"SRNE SEI-12K-UPRO HEBP48120U240-Pro white-label, Central Ohio." Direct identification of Signature Solar's flagship as SRNE OEM.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/srne-sei-12k-upro-hebp48120u240-pro-white-label-central-ohio.110829/" target="_blank" rel="noopener">srne-sei-12k-upro-hebp48120u240-pro-white-label.110829</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"Inverter brand and model vs OEM manufacturer — or who makes this stuff." The cross-reference thread naming PowMr, Y&amp;H, Arenji among others.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/inverter-brand-and-model-vs-oem-manufacturer-or-who-makes-this-stuff.72281/" target="_blank" rel="noopener">who-makes-this-stuff.72281</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">SRNE firmware MPPT-sweep regression on v6.35+ — solar harvest drops every 30 min on newer firmware.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/srne-firmware.120554/" target="_blank" rel="noopener">srne-firmware.120554</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">Parallel pair error codes 08, 15, 21 — voltage drift between units under EV-charger load. Failure persisted across two replacement boards.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/srne-240v-trouble.89901/" target="_blank" rel="noopener">srne-240v-trouble.89901</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"SRNE HEBP48 6kW + JK BMS RS485 RJ45 fault code 58." BMS comms diagnostic thread — fix requires DIP-switch protocol + firmware ≥15.38.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/help-me-please-oem-srne-hesp48-6kw-jk-bms-pb2a16s15p-lifepo4-rs485-rj45-fault-code-58.101504/" target="_blank" rel="noopener">srne-hesp48-jk-bms-fault-58.101504</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">"SRNE HEBP4808-10-120U240-Pro / SEI-8-10-12K-UPRO troubleshooting thread." Active early-build software bug discussion + GrandTech support responsiveness.</div>
+            <div class="meta"><span class="when">DIY Solar Forum</span> · <a href="https://diysolarforum.com/threads/srne-hebp4808-10-120u240-pro-sei-8-10-12k-upro-troubleshooting-thread.117759/" target="_blank" rel="noopener">srne-hebp-pro-troubleshooting.117759</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">SRNE cETL certification announcement — UL1741 + CSA C22.2 No. 107.1 confirmed. UL1741-SB <b>not</b> mentioned.</div>
+            <div class="meta"><span class="when">SRNE official · blog</span> · <a href="https://www.srnesolar.com/blog/free-guides/srne-products-got-cetl-certification-and-passed-ul1741-&-csa-c22.2-standard" target="_blank" rel="noopener">srnesolar.com/blog/cetl-certification</a></div>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="quote">Sol-Ark / Deye Nov 15 2024 remote-disable event coverage — for completeness on the Sol-Ark/Deye crossfire status. <b>SRNE not party</b>.</div>
+            <div class="meta"><span class="when">Solarboi · 2024-11-17</span> · <a href="https://solarboi.com/2024/11/17/sol-ark-oem-disables-all-deye-inverters-in-the-us/" target="_blank" rel="noopener">solarboi.com</a></div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <p class="sect-intro" style="margin-top:24px;font-size:13px;color:var(--faint);letter-spacing:.04em;font-style:italic">
+      <b style="color:var(--brass-2);font-style:normal">Sample size disclosure ·</b> ~25 distinct DIY Solar Forum threads surfaced for SRNE vs ~7 for GSL — <b>4× the install-base signal</b>. Mango Power and EcoFlow PowerOcean explicitly refuted as SRNE-OEM with positive identification of other manufacturers (Infineon + CATL for Mango, Jonhon Optronic for EcoFlow). Treat these grades as field-level signal, not laboratory validation.
+    </p>
+  </section>
+
+  <!-- ============== FOOTER ============== -->
+  <footer>
+    <div>
+      <b>Solarpunk Solutions</b><br>
+      Weaverville · Asheville NC<br>
+      <a href="https://solarpunk-asheville.vercel.app" target="_blank" rel="noopener">solarpunk-asheville.vercel.app</a>
+    </div>
+    <div class="meta">
+      <b>Field Brief · FB-SRNE-02</b><br>
+      Prepared 2026-06-09<br>
+      Cross-reference to <a href="https://solarpunk-inverter-brief.vercel.app" target="_blank" rel="noopener">FB-GSL-01</a> · for internal evaluation only
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
